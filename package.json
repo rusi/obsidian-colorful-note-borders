@@ -1,7 +1,7 @@
 {
-	"name": "obsidian-sample-plugin",
-	"version": "1.0.0",
-	"description": "This is a sample plugin for Obsidian (https://obsidian.md)",
+	"name": "obsidian-colorful-note-borders",
+	"version": "0.1.0",
+	"description": "Add customizable colorful borders to notes based on folder location or frontmatter metadata, enhancing visual organization in Obsidian.",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
