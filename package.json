@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-colorful-note-borders",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Add customizable colorful borders to notes based on folder location or frontmatter metadata, enhancing visual organization in Obsidian.",
 	"main": "main.js",
 	"scripts": {
