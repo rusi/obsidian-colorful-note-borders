@@ -1,14 +1,13 @@
 import { App, Plugin, PluginSettingTab, Setting, TextComponent, ButtonComponent, DropdownComponent, ColorComponent } from 'obsidian';
 import ColorfulNoteBordersPlugin from './main';
 
-enum RuleType {
+export enum RuleType {
 	Folder = "folder",
-	Metadata = "frontmatter"
+	Frontmatter = "frontmatter"
 }
 
-interface ColorRule {
+export interface ColorRule {
 	id: string;
-	name: string;
 	value: string;
 	type: RuleType;
 	color: string;
@@ -21,11 +20,22 @@ export class ColorBorderSettings {
 export const DEFAULT_SETTINGS: ColorBorderSettings = {
 	colorRules: [
 		{
-			id: "Inbox",
-			name: "Inbox",
+			id: "inbox-ffb300",
 			value: "Inbox",
 			type: RuleType.Folder,
-			color: "#FF0000"
+			color: "#ffb300"
+		},
+		{
+			id: "frontmatter-private-499749",
+			value: "category: public",
+			type: RuleType.Frontmatter,
+			color: "#499749"
+		},
+		{
+			id: "frontmatter-private-c44545",
+			value: "category: private",
+			type: RuleType.Frontmatter,
+			color: "#c44545"
 		}
 	],
 };
@@ -53,7 +63,6 @@ export class SettingsTab extends PluginSettingTab {
 			.onClick(() => {
 				const newRule: ColorRule = {
 					id: Date.now().toString(),
-					name: '',
 					value: '',
 					type: RuleType.Folder,
 					color: '#000000',
@@ -70,16 +79,19 @@ export class SettingsTab extends PluginSettingTab {
 		// const ruleSetting = new Setting(ruleSettingDiv);
 		// ruleSetting.setName("Color Rule");
 
-
 		new Setting(ruleSettingDiv)
-			.setName('Name')
-			.addText((text) => text
-				.setPlaceholder('Enter rule name')
-				.setValue(rule.name)
-				.onChange((value) => {
-					rule.name = value;
+			.setName('Type')
+			.addDropdown((dropdown: DropdownComponent) => {
+				dropdown.addOption(RuleType.Folder, 'Folder');
+				dropdown.addOption(RuleType.Frontmatter, 'Frontmatter');
+				dropdown.setValue(rule.type);
+				dropdown.onChange((value) => {
+					rule.type = value as keyof typeof RuleType;
+					console.log(`${value} :: ${rule.type}`);
 					this.plugin.saveSettings();
-				}));
+				});
+				return dropdown;
+			});
 
 		new Setting(ruleSettingDiv)
 			.setName('Value')
@@ -90,20 +102,6 @@ export class SettingsTab extends PluginSettingTab {
 					rule.value = value;
 					this.plugin.saveSettings();
 				}));
-
-		new Setting(ruleSettingDiv)
-			.setName('Type')
-			.addDropdown((dropdown: DropdownComponent) => {
-				dropdown.addOption(RuleType.Folder, 'Folder');
-				dropdown.addOption(RuleType.Metadata, 'Frontmatter');
-				dropdown.setValue(rule.type);
-				dropdown.onChange((value) => {
-					const typedValue = value as keyof typeof RuleType;
-					rule.type = RuleType[typedValue];
-					this.plugin.saveSettings();
-				});
-				return dropdown;
-			});
 
 		const colorSetting = new Setting(ruleSettingDiv)
 			.setName('Color')
@@ -128,6 +126,7 @@ export class SettingsTab extends PluginSettingTab {
 			.setCta().onClick(() => {
 				this.plugin.settings.colorRules = this.plugin.settings.colorRules.filter((r) => r.id !== rule.id);
 				this.plugin.saveSettings();
+				this.plugin.removeStyle(rule);
 				ruleSettingDiv.remove();
 			});
 	}

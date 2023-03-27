@@ -2,6 +2,8 @@
 
 The Colorful Note Borders plugin for Obsidian is designed to help you visually distinguish your notes based on custom rules. By applying colored borders around your notes, you can easily recognize and categorize them based on their folder location or specific frontmatter metadata.
 
+![](assets/ColorfulNoteBordersDemo800.gif?raw=true)
+
 This plugin supports two types of rules:
 
 1. **Folder-based rules**: Apply a colorful border to notes based on their folder location. For example, you can configure a green border to be displayed around notes located in the "Inbox" folder.
