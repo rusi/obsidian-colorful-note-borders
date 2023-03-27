@@ -86,7 +86,7 @@ export class SettingsTab extends PluginSettingTab {
 				dropdown.addOption(RuleType.Frontmatter, 'Frontmatter');
 				dropdown.setValue(rule.type);
 				dropdown.onChange((value) => {
-					rule.type = value as keyof typeof RuleType;
+					rule.type = value as RuleType;
 					console.log(`${value} :: ${rule.type}`);
 					this.plugin.saveSettings();
 				});

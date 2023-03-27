@@ -1,4 +1,4 @@
-import { App, Plugin, PluginSettingTab, Setting, CachedMetadata, TFile, TFolder, View } from 'obsidian';
+import { App, Plugin, PluginSettingTab, Setting, CachedMetadata, TFile, TFolder, View, WorkspaceLeaf } from 'obsidian';
 
 import { SettingsTab, ColorBorderSettings, DEFAULT_SETTINGS, ColorRule, RuleType } from './settingsTab';
 
@@ -37,16 +37,18 @@ export default class ColorfulNoteBordersPlugin extends Plugin {
 		}
 	}
 
-	async onActiveLeafChange(activeLeaf) {
-		if (!activeLeaf || !activeLeaf.view || !activeLeaf.view.file) {
+	async onActiveLeafChange(activeLeaf: WorkspaceLeaf) {
+		const activeFile = this.app.workspace.getActiveFile();
+		if (!activeLeaf || !activeLeaf.view || !activeFile) {
 			return;
 		}
-		this.applyRules(activeLeaf.view.file);
+		this.applyRules(activeFile);
 	}
 
 	async onMetadataChange(file: TFile) {
 		const activeLeaf = this.app.workspace.getLeaf();
-		if (activeLeaf && activeLeaf.view && activeLeaf.view.file && file.path === activeLeaf.view.file.path) {
+		const activeFile = this.app.workspace.getActiveFile();
+		if (activeLeaf && activeLeaf.view && activeFile && file.path === activeFile.path) {
 			this.applyRules(file);
 		}
 	}
@@ -63,7 +65,10 @@ export default class ColorfulNoteBordersPlugin extends Plugin {
 	async saveSettings() {
 		await this.saveData(this.settings);
 		this.updateStyles();
-		this.onFileRename(this.app.workspace.getActiveFile());
+		const activeFile = this.app.workspace.getActiveFile();
+		if (activeFile) {
+			this.onFileRename(activeFile);
+		}
 	}
 
 	async updateStyles() {
@@ -104,6 +109,9 @@ export default class ColorfulNoteBordersPlugin extends Plugin {
 		const viewElement = activeLeaf.view.containerEl;
 		const contentView = viewElement.querySelector(".view-content");
 
+		if (!contentView) {
+			return;
+		}
 		this.unhighlightNote(contentView);
 		this.settings.colorRules.forEach((rule) => {
 			// console.log(rule);
