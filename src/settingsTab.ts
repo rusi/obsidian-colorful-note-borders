@@ -1,9 +1,9 @@
-import { App, Plugin, PluginSettingTab, Setting, TextComponent, ButtonComponent, DropdownComponent } from 'obsidian';
+import { App, Plugin, PluginSettingTab, Setting, TextComponent, ButtonComponent, DropdownComponent, ColorComponent } from 'obsidian';
 import ColorfulNoteBordersPlugin from './main';
 
 enum RuleType {
-	Folder,
-	Metadata
+	Folder = "folder",
+	Metadata = "frontmatter"
 }
 
 interface ColorRule {
@@ -55,7 +55,7 @@ export class SettingsTab extends PluginSettingTab {
 					id: Date.now().toString(),
 					name: '',
 					value: '',
-					type: 'path',
+					type: RuleType.Folder,
 					color: '#000000',
 				};
 				this.plugin.settings.colorRules.push(newRule);
@@ -66,6 +66,10 @@ export class SettingsTab extends PluginSettingTab {
 
 	addRuleSetting(containerEl: HTMLElement, rule: ColorRule): void {
 		const ruleSettingDiv = containerEl.createEl('div', { cls: 'rule-setting' });
+
+		// const ruleSetting = new Setting(ruleSettingDiv);
+		// ruleSetting.setName("Color Rule");
+
 
 		new Setting(ruleSettingDiv)
 			.setName('Name')
@@ -90,17 +94,18 @@ export class SettingsTab extends PluginSettingTab {
 		new Setting(ruleSettingDiv)
 			.setName('Type')
 			.addDropdown((dropdown: DropdownComponent) => {
-				dropdown.addOption('path', 'Path');
-				dropdown.addOption('frontmatter', 'Frontmatter');
+				dropdown.addOption(RuleType.Folder, 'Folder');
+				dropdown.addOption(RuleType.Metadata, 'Frontmatter');
 				dropdown.setValue(rule.type);
 				dropdown.onChange((value) => {
-					rule.type = value;
+					const typedValue = value as keyof typeof RuleType;
+					rule.type = RuleType[typedValue];
 					this.plugin.saveSettings();
 				});
 				return dropdown;
 			});
 
-		new Setting(ruleSettingDiv)
+		const colorSetting = new Setting(ruleSettingDiv)
 			.setName('Color')
 			.addText((text) => text
 				.setPlaceholder('Enter color hex code')
@@ -109,6 +114,14 @@ export class SettingsTab extends PluginSettingTab {
 					rule.color = value;
 					this.plugin.saveSettings();
 				}));
+
+		colorSetting.addColorPicker((picker) => {
+			picker.setValue(rule.color);
+			picker.onChange((color) => {
+				rule.color = color;
+				this.plugin.saveSettings();
+			});
+		});
 
 		new ButtonComponent(ruleSettingDiv)
 			.setButtonText('Remove')
