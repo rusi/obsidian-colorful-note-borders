@@ -26,7 +26,7 @@ export const DEFAULT_SETTINGS: ColorBorderSettings = {
 			color: "#ffb300"
 		},
 		{
-			id: "frontmatter-private-499749",
+			id: "frontmatter-public-499749",
 			value: "category: public",
 			type: RuleType.Frontmatter,
 			color: "#499749"
@@ -54,8 +54,12 @@ export class SettingsTab extends PluginSettingTab {
 
 		containerEl.createEl('h2', { text: 'Highlight Color Rules' });
 
+		const rulesContainer = containerEl.createEl('div', {
+			cls: 'rules-container',
+		});
+
 		// Display existing rules
-		this.plugin.settings.colorRules.forEach((rule) => this.addRuleSetting(containerEl, rule));
+		this.plugin.settings.colorRules.forEach((rule, index) => this.addRuleSetting(rulesContainer, rule, index));
 
 		// Add new rule button
 		new ButtonComponent(containerEl)
@@ -68,16 +72,19 @@ export class SettingsTab extends PluginSettingTab {
 					color: '#000000',
 				};
 				this.plugin.settings.colorRules.push(newRule);
-				this.addRuleSetting(containerEl, newRule);
+				this.addRuleSetting(rulesContainer, newRule);
 				this.plugin.saveSettings();
 			});
 	}
 
-	addRuleSetting(containerEl: HTMLElement, rule: ColorRule): void {
-		const ruleSettingDiv = containerEl.createEl('div', { cls: 'rule-setting' });
-
-		// const ruleSetting = new Setting(ruleSettingDiv);
-		// ruleSetting.setName("Color Rule");
+	addRuleSetting(
+		containerEl: HTMLElement,
+		rule: ColorRule,
+		index: number = this.plugin.settings.colorRules.length - 1,
+	): void {
+		const ruleSettingDiv = containerEl.createEl('div', {
+			cls: 'rule-setting',
+		});
 
 		new Setting(ruleSettingDiv)
 			.setName('Type')
@@ -87,10 +94,8 @@ export class SettingsTab extends PluginSettingTab {
 				dropdown.setValue(rule.type);
 				dropdown.onChange((value) => {
 					rule.type = value as RuleType;
-					console.log(`${value} :: ${rule.type}`);
 					this.plugin.saveSettings();
 				});
-				return dropdown;
 			});
 
 		new Setting(ruleSettingDiv)
@@ -103,22 +108,26 @@ export class SettingsTab extends PluginSettingTab {
 					this.plugin.saveSettings();
 				}));
 
-		const colorSetting = new Setting(ruleSettingDiv)
-			.setName('Color')
-			.addText((text) => text
-				.setPlaceholder('Enter color hex code')
-				.setValue(rule.color)
-				.onChange((value) => {
-					rule.color = value;
-					this.plugin.saveSettings();
-				}));
+		const colorSetting = new Setting(ruleSettingDiv).setName('Color');
 
-		colorSetting.addColorPicker((picker) => {
-			picker.setValue(rule.color);
-			picker.onChange((color) => {
+		const colorInput = new TextComponent(colorSetting.controlEl)
+			.setPlaceholder('Enter color hex code')
+			.setValue(rule.color);
+
+		const picker = new ColorComponent(colorSetting.controlEl)
+			.setValue(rule.color)
+			.onChange((color) => {
 				rule.color = color;
+				colorInput.setValue(color);
 				this.plugin.saveSettings();
 			});
+
+		colorInput.onChange((value: string) => {
+			if (/^#(?:[0-9a-fA-F]{3}){1,2}$/.test(value)) {
+				rule.color = value;
+				picker.setValue(value);
+				this.plugin.saveSettings();
+			}
 		});
 
 		new ButtonComponent(ruleSettingDiv)
