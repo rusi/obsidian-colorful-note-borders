@@ -101,8 +101,6 @@ export default class ColorfulNoteBordersPlugin extends Plugin {
 	async applyRules(file: TFile) {
 		if (!file || file.extension !== "md") return;
 
-		// console.log(file);
-
 		const activeLeaf = this.app.workspace.getLeaf();
 		if (!activeLeaf || !activeLeaf.view) return;
 
@@ -113,44 +111,44 @@ export default class ColorfulNoteBordersPlugin extends Plugin {
 			return;
 		}
 		this.unhighlightNote(contentView);
-		this.settings.colorRules.forEach((rule) => {
-			// console.log(rule);
-			switch (rule.type) {
-				case RuleType.Folder: {
-					// console.log(file.path, rule.value);
-					if (this.checkPath(file.path, rule.value)) {
-						this.highlightNote(contentView, rule);
-					}
-					break;
-				}
-				case RuleType.Frontmatter: {
-					const [key, value] = rule.value.split(":", 2);
-					const frontMatterValue = this.app.metadataCache.getFileCache(file)?.frontmatter?.[key];
-					const normalizedFrontMatterValue = frontMatterValue?.toString().toLowerCase().trim();
-					const normalizedValueToHighlight = value?.toString().toLowerCase().trim();
-					// console.log(`front matter: ${key}, ${value} :: ${normalizedFrontMatterValue} === ${normalizedValueToHighlight}`);
-					if (normalizedFrontMatterValue === normalizedValueToHighlight) {
-						this.highlightNote(contentView, rule);
-						// console.log("content highlight")
-					}
-					break;
-				}
-			}
+		this.settings.colorRules.some((rule) => {
+			return this.applyRule(file, rule, contentView);
 		});
 	}
 
+	applyRule(file: TFile, rule: ColorRule, contentView: Element): boolean {
+		switch (rule.type) {
+			case RuleType.Folder: {
+				if (this.checkPath(file.path, rule.value)) {
+					this.highlightNote(contentView, rule);
+					return true;
+				}
+				break;
+			}
+			case RuleType.Frontmatter: {
+				const [key, value] = rule.value.split(":", 2);
+				const frontMatterValue = this.app.metadataCache.getFileCache(file)?.frontmatter?.[key];
+				const normalizedFrontMatterValue = frontMatterValue?.toString().toLowerCase().trim();
+				const normalizedValueToHighlight = value?.toString().toLowerCase().trim();
+				// console.log(`front matter: ${key}, ${value} :: ${normalizedFrontMatterValue} === ${normalizedValueToHighlight}`);
+				if (normalizedFrontMatterValue === normalizedValueToHighlight) {
+					this.highlightNote(contentView, rule);
+					return true;
+				}
+				break
+			}
+		}
+		return false;
+	}
+
 	highlightNote(element: Element, rule: ColorRule) {
-		// console.log(`highlight: ${rule.id}`);
 		element.classList.add(this.makeStyleName(rule));
-		// console.log(element);
 	}
 
 	unhighlightNote(element: Element) {
 		this.settings.colorRules.forEach((rule) => {
 			element.classList.remove(this.makeStyleName(rule));
 		});
-		// console.log(`un highlight ---`);
-		// console.log(element);
 	}
 
 	checkPath(currentPath: string, blacklistedPath: string): boolean {
@@ -161,21 +159,3 @@ export default class ColorfulNoteBordersPlugin extends Plugin {
 		return `cnb-${rule.id}-style`;
 	}
 }
-
-// 	display(): void {
-// 		const {containerEl} = this;
-// 		containerEl.empty();
-// 		containerEl.createEl('h2', {text: 'Settings for my awesome plugin.'});
-// 		new Setting(containerEl)
-// 			.setName('Setting #1')
-// 			.setDesc('It\'s a secret')
-// 			.addText(text => text
-// 				.setPlaceholder('Enter your secret')
-// 				.setValue(this.plugin.settings.mySetting)
-// 				.onChange(async (value) => {
-// 					console.log('Secret: ' + value);
-// 					this.plugin.settings.mySetting = value;
-// 					await this.plugin.saveSettings();
-// 				}));
-// 	}
-// }

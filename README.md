@@ -22,7 +22,7 @@ The Colorful Note Borders plugin for Obsidian offers the following features:
   - Folder location
   - Frontmatter metadata
 - Users can add, edit, and remove rules from the settings page.
-- Users can re-order the rules to prioritize which rule takes precedence when multiple rules match. The last rule takes precedence.
+- Users can re-order the rules to prioritize which rule takes precedence when multiple rules match. The first rule takes precedence.
 - Compatible with Obsidian's light and dark modes.
 
 ## Installation
