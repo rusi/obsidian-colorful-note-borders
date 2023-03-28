@@ -20,7 +20,7 @@
 
 .cnb-rule-settings-header-row {
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr 1fr;
+	grid-template-columns: 2fr 2fr 2fr 0.5fr 0.5fr 0.5fr;
 	/* gap: 10px; */
 	font-weight: bold;
 	align-items: center;
@@ -29,7 +29,7 @@
 
 .cnb-rule-settings-row {
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr 1fr;
+	grid-template-columns: 2fr 2fr 2fr 0.5fr 0.5fr 0.5fr;
 	/* gap: 10px; */
 	align-items: center;
 	/* margin-bottom: 5px; */
@@ -44,6 +44,14 @@
 .cnb-rule-setting-item-text-input {
 	width: 6em;
 }
+
+/*
+button.cnd-rule-setting-item-up-button,
+button.cnd-rule-setting-item-down-button,
+button.cnd-rule-setting-item-delete-button
+ {
+	padding: 0;
+} */
 
 /* .cnb-rule-settings-column-rule-type {
 	width: 10em;

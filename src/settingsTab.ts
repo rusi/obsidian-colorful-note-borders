@@ -119,7 +119,7 @@ export class SettingsTab extends PluginSettingTab {
 
 		const colorSetting = new Setting(ruleSettingDiv)
 			.setClass('cnb-rule-setting-item');
-			// .setName('Color');
+		// .setName('Color');
 		// colorSetting.settingEl.style.gridColumn = '3';
 
 		const colorInput = new TextComponent(colorSetting.controlEl)
@@ -144,7 +144,40 @@ export class SettingsTab extends PluginSettingTab {
 		});
 
 		new ButtonComponent(ruleSettingDiv)
+			.setButtonText('▲')
+			// .setIcon("up-arrow")
+			.setTooltip("Move Up")
+			.setClass('cnb-rule-setting-item-up-button')
+			.setDisabled(index == 0)
+			.onClick(() => {
+				if (index > 0) {
+					this.plugin.settings.colorRules.splice(index, 1);
+					this.plugin.settings.colorRules.splice(index - 1, 0, rule);
+					this.plugin.saveSettings();
+					this.display();
+				}
+			});
+
+		new ButtonComponent(ruleSettingDiv)
+			.setButtonText('▼')
+			// .setIcon("down-arrow")
+			.setTooltip("Move Down")
+			.setClass('cnb-rule-setting-item-down-button')
+			.setDisabled(index == this.plugin.settings.colorRules.length - 1)
+			.onClick(() => {
+				if (index < this.plugin.settings.colorRules.length - 1) {
+					this.plugin.settings.colorRules.splice(index, 1);
+					this.plugin.settings.colorRules.splice(index + 1, 0, rule);
+					this.plugin.saveSettings();
+					this.display();
+				}
+			});
+
+		new ButtonComponent(ruleSettingDiv)
 			.setButtonText('Remove')
+			// .setIcon('remove')
+			// .setTooltip("Remove")
+			.setClass('cnb-rule-setting-item-remove-button')
 			.setCta().onClick(() => {
 				this.plugin.settings.colorRules = this.plugin.settings.colorRules.filter((r) => r.id !== rule.id);
 				this.plugin.saveSettings();

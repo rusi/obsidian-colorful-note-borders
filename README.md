@@ -17,11 +17,13 @@ By using the Colorful Note Borders plugin, you can create a more organized and v
 
 The Colorful Note Borders plugin for Obsidian offers the following features:
 
-- Apply colorful borders to notes based on customizable rules
+- Apply colorful borders to notes based on customizable rules.
 - Supports two types of rules:
   - Folder location
   - Frontmatter metadata
-- Add and remove rules as needed
+- Users can add, edit, and remove rules from the settings page.
+- Users can re-order the rules to prioritize which rule takes precedence when multiple rules match. The last rule takes precedence.
+- Compatible with Obsidian's light and dark modes.
 
 ## Installation
 
