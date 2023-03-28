@@ -51,12 +51,18 @@ export class SettingsTab extends PluginSettingTab {
 	display(): void {
 		let { containerEl } = this;
 		containerEl.empty();
+		containerEl.createEl('h1', { text: 'Colorful Note Borders Settings' });
 
-		containerEl.createEl('h2', { text: 'Highlight Color Rules' });
+		// Create a header row
+		const headerRow = containerEl.createEl('div', { cls: 'cnb-rule-settings-header-row' });
 
-		const rulesContainer = containerEl.createEl('div', {
-			cls: 'rules-container',
-		});
+		// Add labels for each column
+		headerRow.createEl('span', { text: 'Rule Type', cls: 'cnb-rule-settings-column-rule-type' });
+		headerRow.createEl('span', { text: 'Value', cls: 'cnb-rule-settings-column-rule-value' });
+		headerRow.createEl('span', { text: 'Color', cls: 'cnb-rule-settings-column-rule-color' });
+		headerRow.createEl('span', { text: '', cls: 'cnb-rule-settings-column-rule-button' });
+
+		const rulesContainer = containerEl.createEl('div', { cls: 'cnb-rules-container' });
 
 		// Display existing rules
 		this.plugin.settings.colorRules.forEach((rule, index) => this.addRuleSetting(rulesContainer, rule, index));
@@ -82,12 +88,11 @@ export class SettingsTab extends PluginSettingTab {
 		rule: ColorRule,
 		index: number = this.plugin.settings.colorRules.length - 1,
 	): void {
-		const ruleSettingDiv = containerEl.createEl('div', {
-			cls: 'rule-setting',
-		});
+		const ruleSettingDiv = containerEl.createEl('div', { cls: 'cnb-rule-settings-row' });
 
 		new Setting(ruleSettingDiv)
-			.setName('Type')
+			// .setName('Type')
+			.setClass('cnb-rule-setting-item')
 			.addDropdown((dropdown: DropdownComponent) => {
 				dropdown.addOption(RuleType.Folder, 'Folder');
 				dropdown.addOption(RuleType.Frontmatter, 'Frontmatter');
@@ -96,23 +101,31 @@ export class SettingsTab extends PluginSettingTab {
 					rule.type = value as RuleType;
 					this.plugin.saveSettings();
 				});
+				dropdown.selectEl.classList.add('cnb-rule-type-dropdown');
 			});
 
 		new Setting(ruleSettingDiv)
-			.setName('Value')
-			.addText((text) => text
-				.setPlaceholder('Enter rule value')
-				.setValue(rule.value)
-				.onChange((value) => {
+			// .setName('Value')
+			.setClass('cnb-rule-setting-item')
+			.addText((text) => {
+				text.setPlaceholder('Enter rule value');
+				text.setValue(rule.value);
+				text.onChange((value) => {
 					rule.value = value;
 					this.plugin.saveSettings();
-				}));
+				});
+				text.inputEl.classList.add('cnb-rule-value-input');
+			});
 
-		const colorSetting = new Setting(ruleSettingDiv).setName('Color');
+		const colorSetting = new Setting(ruleSettingDiv)
+			.setClass('cnb-rule-setting-item');
+			// .setName('Color');
+		// colorSetting.settingEl.style.gridColumn = '3';
 
 		const colorInput = new TextComponent(colorSetting.controlEl)
 			.setPlaceholder('Enter color hex code')
 			.setValue(rule.color);
+		colorInput.inputEl.classList.add('cnb-rule-setting-item-text-input');
 
 		const picker = new ColorComponent(colorSetting.controlEl)
 			.setValue(rule.color)

@@ -1,8 +1,59 @@
-/*
 
-This CSS file will be included with your plugin, and
-available in the app when your plugin is enabled.
+.cnb-rules-container {
+	margin-bottom: 1em;
+	border-top: 1px solid var(--background-modifier-border);
+}
 
-If your plugin does not need CSS, delete this file.
+.cnb-rule-setting-item,
+.cnb-rule-setting-item:first-child {
+	padding: 0.35em 0;
+	justify-content: center;
+	border-top: 1px solid var(--background-modifier-border);
+}
 
-*/
+.cnb-rule-setting-item .setting-item-info {
+	display: none;
+}
+.cnb-rule-setting-item .setting-item-control {
+	flex: none;
+}
+
+.cnb-rule-settings-header-row {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	/* gap: 10px; */
+	font-weight: bold;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.cnb-rule-settings-row {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	/* gap: 10px; */
+	align-items: center;
+	/* margin-bottom: 5px; */
+}
+
+.cnb-rule-type-dropdown {
+	width: 10em;
+}
+.cnb-rule-value-input {
+	width: 10em;
+}
+.cnb-rule-setting-item-text-input {
+	width: 6em;
+}
+
+/* .cnb-rule-settings-column-rule-type {
+	width: 10em;
+}
+.cnb-rule-settings-column-rule-value {
+	width: 10em;
+}
+.cnb-rule-settings-column-rule-color {
+	width: 6em;
+}
+.cnb-rule-settings-column-rule-button {
+	width: 6em;
+} */
