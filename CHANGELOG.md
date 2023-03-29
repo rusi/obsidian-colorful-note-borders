@@ -1,10 +1,14 @@
 # Changelog
 
+## 0.2.2 (2023-03-28)
+
+- code cleanup
+
 ## 0.2.1 (2023-03-27)
 
 ### Bugfixes
 
-- multiple matching rules are now applied correctly based on their order - first rule takes precedence.
+- Multiple matching rules are now applied correctly based on their order - first rule takes precedence.
 
 ## 0.2.0 (2023-03-27)
 

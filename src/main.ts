@@ -1,4 +1,4 @@
-import { App, Plugin, PluginSettingTab, Setting, CachedMetadata, TFile, TFolder, View, WorkspaceLeaf } from 'obsidian';
+import { App, Plugin, PluginSettingTab, Setting, CachedMetadata, TFile, TFolder, MarkdownView, WorkspaceLeaf } from 'obsidian';
 
 import { SettingsTab, ColorBorderSettings, DEFAULT_SETTINGS, ColorRule, RuleType } from './settingsTab';
 
@@ -46,9 +46,8 @@ export default class ColorfulNoteBordersPlugin extends Plugin {
 	}
 
 	async onMetadataChange(file: TFile) {
-		const activeLeaf = this.app.workspace.getLeaf();
 		const activeFile = this.app.workspace.getActiveFile();
-		if (activeLeaf && activeLeaf.view && activeFile && file.path === activeFile.path) {
+		if (activeFile && file.path === activeFile.path) {
 			this.applyRules(file);
 		}
 	}
@@ -99,17 +98,12 @@ export default class ColorfulNoteBordersPlugin extends Plugin {
 	}
 
 	async applyRules(file: TFile) {
-		if (!file || file.extension !== "md") return;
+		const activeView = this.app.workspace.getActiveViewOfType(MarkdownView);
+		if (!activeView) return;
 
-		const activeLeaf = this.app.workspace.getLeaf();
-		if (!activeLeaf || !activeLeaf.view) return;
+		const contentView = activeView.containerEl.querySelector(".view-content");
+		if (!contentView) return;
 
-		const viewElement = activeLeaf.view.containerEl;
-		const contentView = viewElement.querySelector(".view-content");
-
-		if (!contentView) {
-			return;
-		}
 		this.unhighlightNote(contentView);
 		this.settings.colorRules.some((rule) => {
 			return this.applyRule(file, rule, contentView);
