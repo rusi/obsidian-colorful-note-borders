@@ -38,22 +38,15 @@ export default class ColorfulNoteBordersPlugin extends Plugin {
 	}
 
 	async onActiveLeafChange(activeLeaf: WorkspaceLeaf) {
-		const activeFile = this.app.workspace.getActiveFile();
-		if (!activeLeaf || !activeLeaf.view || !activeFile) {
-			return;
-		}
-		this.applyRules(activeFile);
+		this.applyRules();
 	}
 
 	async onMetadataChange(file: TFile) {
-		const activeFile = this.app.workspace.getActiveFile();
-		if (activeFile && file.path === activeFile.path) {
-			this.applyRules(file);
-		}
+		this.applyRules(file);
 	}
 
 	async onFileRename(file: TFile) {
-		this.applyRules(file);
+		this.applyRules();
 	}
 
 	async loadSettings() {
@@ -97,16 +90,19 @@ export default class ColorfulNoteBordersPlugin extends Plugin {
 		}
 	}
 
-	async applyRules(file: TFile) {
-		const activeView = this.app.workspace.getActiveViewOfType(MarkdownView);
-		if (!activeView) return;
+	async applyRules(file: TFile | null = null) {
+		this.app.workspace.getLeavesOfType("markdown").forEach((value: WorkspaceLeaf) => {
+			if (!(value.view instanceof MarkdownView)) return;
+			const activeView = value.view as MarkdownView;
+			const viewFile = activeView.file;
+			if (file && file !== viewFile) return;
+			const contentView = activeView.containerEl.querySelector(".view-content");
+			if (!contentView) return;
 
-		const contentView = activeView.containerEl.querySelector(".view-content");
-		if (!contentView) return;
-
-		this.unhighlightNote(contentView);
-		this.settings.colorRules.some((rule) => {
-			return this.applyRule(file, rule, contentView);
+			this.unhighlightNote(contentView);
+			this.settings.colorRules.some((rule) => {
+				return this.applyRule(viewFile, rule, contentView);
+			});
 		});
 	}
 

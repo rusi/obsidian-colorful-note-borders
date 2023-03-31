@@ -11,7 +11,9 @@ By using the Colorful Note Borders plugin, you can create a more organized and v
 
 ## Demo
 
-<img src="https://raw.githubusercontent.com/rusi/obsidian-colorful-note-borders/master/assets/ColorfulNoteBordersDemo800.gif" style=" box-shadow: 0 2px 8px 0 var(--background-modifier-border); border-radius: 8px; ">
+<img src="https://raw.githubusercontent.com/rusi/obsidian-colorful-note-borders/master/assets/ColorfulNoteBordersDemov0.3.gif" style=" box-shadow: 0 2px 8px 0 var(--background-modifier-border); border-radius: 8px; ">
+
+<img src="https://raw.githubusercontent.com/rusi/obsidian-colorful-note-borders/master/assets/PopupWindow.png" style=" box-shadow: 0 2px 8px 0 var(--background-modifier-border); border-radius: 8px; ">
 
 ## Features
 

@@ -5,6 +5,5 @@
 	"minAppVersion": "0.15.0",
 	"description": "Add customizable colorful borders to notes based on folder location or frontmatter metadata, enhancing visual organization in Obsidian.",
 	"author": "rusi",
-	"isDesktopOnly": false,
-	"main": "main.js"
+	"isDesktopOnly": false
 }
