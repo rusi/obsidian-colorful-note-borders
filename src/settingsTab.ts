@@ -11,6 +11,7 @@ export interface ColorRule {
     value: string;
     type: RuleType;
     color: string;
+	width: string;
 }
 
 export class ColorBorderSettings {
@@ -23,19 +24,22 @@ export const DEFAULT_SETTINGS: ColorBorderSettings = {
             id: "inbox-ffb300",
             value: "Inbox",
             type: RuleType.Folder,
-            color: "#ffb300"
+            color: "#ffb300",
+			width: "5"
         },
         {
             id: "frontmatter-public-499749",
             value: "category: public",
             type: RuleType.Frontmatter,
-            color: "#499749"
+            color: "#499749",
+			width: "5"
         },
         {
             id: "frontmatter-private-c44545",
             value: "category: private",
             type: RuleType.Frontmatter,
-            color: "#c44545"
+            color: "#c44545",
+			width: "5"
         }
     ],
 };
@@ -59,6 +63,7 @@ export class SettingsTab extends PluginSettingTab {
         // Add labels for each column
         headerRow.createEl('span', { text: 'Rule Type', cls: 'cnb-rule-settings-column-rule-type' });
         headerRow.createEl('span', { text: 'Value', cls: 'cnb-rule-settings-column-rule-value' });
+		headerRow.createEl("span", { text: "Width", cls: "cnb-rule-settings-column-rule-width" });
         headerRow.createEl('span', { text: 'Color', cls: 'cnb-rule-settings-column-rule-color' });
         headerRow.createEl('span', { text: '', cls: 'cnb-rule-settings-column-rule-button' });
 
@@ -76,6 +81,7 @@ export class SettingsTab extends PluginSettingTab {
                     value: '',
                     type: RuleType.Folder,
                     color: '#000000',
+					width: '5',
                 };
                 this.plugin.settings.colorRules.push(newRule);
                 this.addRuleSetting(rulesContainer, newRule);
@@ -115,6 +121,19 @@ export class SettingsTab extends PluginSettingTab {
                     this.plugin.saveSettings();
                 });
                 text.inputEl.classList.add('cnb-rule-value-input');
+            });
+			
+		new Setting(ruleSettingDiv)
+            // .setName('Width')
+            .setClass('cnb-rule-setting-item')
+            .addText((text) => {
+				text.setPlaceholder("Enter width in pixel");
+				text.setValue(rule.width);
+				text.onChange((value) => {
+					rule.width = value;
+					this.plugin.saveSettings();
+				});
+				text.inputEl.classList.add("cnb-rule-width-input");
             });
 
         const colorSetting = new Setting(ruleSettingDiv)

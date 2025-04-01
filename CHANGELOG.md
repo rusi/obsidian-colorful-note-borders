@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.0 (2025-04-01)
+
+### Features
+
+- Added ability to set custom width for the borders
+  - The setting is per rule
+
 ## NEXT (NEXT)
 
 ### Bugfixes

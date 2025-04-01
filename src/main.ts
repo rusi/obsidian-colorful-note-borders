@@ -79,7 +79,7 @@ export default class ColorfulNoteBordersPlugin extends Plugin {
         const styleName = this.makeStyleName(rule);
         this.updateCustomCSS(styleName, `
 			.${styleName} {
-				border: 5px solid ${rule.color} !important;
+				border: ${rule.width}px solid ${rule.color} !important;
 			}
 		`);
     }

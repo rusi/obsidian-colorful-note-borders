@@ -20,7 +20,7 @@
 
 .cnb-rule-settings-header-row {
 	display: grid;
-	grid-template-columns: 2fr 2fr 2fr 0.5fr 0.5fr 0.5fr;
+	grid-template-columns: 2.3fr 2.3fr 1.1fr 2fr 0.5fr 0.5fr 0.5fr;
 	/* gap: 10px; */
 	font-weight: bold;
 	align-items: center;
@@ -29,7 +29,7 @@
 
 .cnb-rule-settings-row {
 	display: grid;
-	grid-template-columns: 2fr 2fr 2fr 0.5fr 0.5fr 0.5fr;
+	grid-template-columns: 1.5fr 3fr 0.7fr 2fr 0.5fr 0.5fr 0.5fr;
 	/* gap: 10px; */
 	align-items: center;
 	/* margin-bottom: 5px; */
@@ -40,6 +40,9 @@
 }
 .cnb-rule-value-input {
 	width: 10em;
+}
+.cnb-rule-width-input {
+	width: 5em;
 }
 .cnb-rule-setting-item-text-input {
 	width: 6em;
